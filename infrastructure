@@ -7,3 +7,7 @@ rasp0 ansible_host=192.168.1.10 ansible_port=22
 rasp1 ansible_host=192.168.1.11 ansible_port=22
 rasp2 ansible_host=192.168.1.12 ansible_port=22
 rasp3 ansible_host=192.168.1.13 ansible_port=22
+
+
+[mqtt_cluster]
+mqtt0 ansible_host=10.10.88.3 ansible_port=22
