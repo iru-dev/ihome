@@ -21,11 +21,6 @@
   tags: sudo
   copy: src=wheel-sudo-nopasswd dest=/etc/sudoers.d/wheel-sudo-nopasswd owner=root mode=0400
 
-# replaced by install-repo-epel in dependencies
-# - name: Install EPEL
-#   tags: soft
-#   yum: name=epel-release state=present
-
 - name: Preinstalling packages Centos7
   tags: soft
   yum: name="{{ prepackages }}" state=present
@@ -44,7 +39,7 @@
 
 - name: Add Admins to server
   tags: add_admin
-  user: name="{{ item.user }}" shell="{{ item.shell }}" groups="{{ item.groups }}" append=yes  state={{item.state|default("present")}} remove={{item.remove|default("no")}}
+  user: name="{{item.user}}" shell="{{ item.shell }}" groups="{{ item.groups }}" append=yes  state={{item.state|default("present")}} remove={{item.remove|default("no")}}
   with_items:
     - "{{ ssh_admins + ssh_limited_admins }}"
 

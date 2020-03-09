@@ -18,5 +18,3 @@ cache/*
 cache-files/*
 my/*
 
-temp-*.yml
-

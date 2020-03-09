@@ -1,5 +1,5 @@
 [web-server]
-srv0 ansible_host=10.10.88.3 ansible_port=22
+web0 ansible_host=10.10.88.3 ansible_port=22
 
 
 [cluseter]
