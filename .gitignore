@@ -1,0 +1,22 @@
+########
+ansible.log
+#ansible.cfg
+
+# Gather cache #
+################
+cache/*
+
+# Other #
+#########
+*.swp
+*.DS_Store
+
+.mc.menu
+.idea
+.vscode
+
+cache-files/*
+my/*
+
+temp-*.yml
+
