@@ -1,0 +1,20 @@
+---
+#
+#  ansible-playbook playbook-webcommon.yml прокомонить сервер по минимуму, 5 ролей
+#
+#  ansible-playbook playbook-webcommon.yml -e "front=true www=true wfront=true" # прокомонить что требуется для веб серверов
+#
+- hosts: all
+  strategy: free
+  vars:
+    - just_installed: true
+
+  roles:
+    - common
+    - role: hostname #run role hostname only when tag hostname is setup
+      tags:
+        - never
+        - hostname
+    - install-iptables
+    - set-timezone
+    - install-sshd-default

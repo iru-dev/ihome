@@ -1,0 +1,7 @@
+---
+ssh_admins:
+  - user: iru
+    shell: '/bin/bash'
+    groups: 'wheel'
+    key: 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEc+3urcgtO7IhOfKGXJiFjPWguku2Du13ZW/PbfjBco7h1T+FB1/eiCDP2Rm9DNrYGbPgsGVRfSllGsFwHoEA8= iru@worker'
+

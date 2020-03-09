@@ -1,0 +1,19 @@
+---
+- name: install mosquitto server
+  tags: install 
+  yum: name=mosquitto state=present
+
+- name: ienable auto boot mqtt service 
+  tags: install
+  service:
+    name: mosquitto
+    enabled: yes
+
+- name: Reload systemd
+  tags: reload
+  systemd: name=mosquitto daemon_reload=yes
+  ignore_errors: yes
+
+- name: mqtt restart
+  tags: reload
+  service: name=mosquitto state=restarted
