@@ -1,0 +1,84 @@
+---
+- name: install libselinux-python
+  tags: soft
+  yum: name=libselinux-python state=present
+  when: ansible_distribution_major_version == "7"
+
+- name: install libselinux-python
+  tags: soft
+  yum: name=python3-libselinux state=present
+  when: ansible_distribution_major_version == "8"
+
+- name: install sudo
+  tags: soft
+  yum: name=sudo state=present
+
+- name: install openssh-clients (need scp)
+  tags: soft
+  yum: name=openssh-clients state=present
+
+- name: Allow sudo to wheel group
+  tags: sudo
+  copy: src=wheel-sudo-nopasswd dest=/etc/sudoers.d/wheel-sudo-nopasswd owner=root mode=0400
+
+# replaced by install-repo-epel in dependencies
+# - name: Install EPEL
+#   tags: soft
+#   yum: name=epel-release state=present
+
+- name: Preinstalling packages Centos7
+  tags: soft
+  yum: name="{{ prepackages }}" state=present
+  when: ansible_distribution_major_version == "7"
+
+- name: Preinstalling packages Centos8
+  tags: soft
+  yum: name="{{ prepackages8 }}" state=present
+  when: ansible_distribution_major_version == "8"
+
+- name: Disable SELinux
+  tags:
+    - selinux
+  selinux: policy=targeted state=disabled
+  ignore_errors: yes
+
+- name: Add Admins to server
+  tags: add_admin
+  user: name="{{ item.user }}" shell="{{ item.shell }}" groups="{{ item.groups }}" append=yes  state={{item.state|default("present")}} remove={{item.remove|default("no")}}
+  with_items:
+    - "{{ ssh_admins + ssh_limited_admins }}"
+
+- name: Adding ssh-keys to Admins
+  tags: add_admin
+  authorized_key: user="{{ item.user }}" key="{{ item.key }}"
+  with_items:
+    - "{{ ssh_admins + ssh_limited_admins }}"
+
+- name: Check main daemons be enabled
+  service: name="{{ item.name }}" enabled="{{ item.enabled }}" state=started
+  with_items:
+    - "{{ predaemons }}"
+  when: ansible_distribution_major_version == "7"
+
+- name: Check main daemons be enabled
+  service: name="{{ item.name }}" enabled="{{ item.enabled }}" state=started
+  with_items:
+    - "{{ predaemons8 }}"
+  when: ansible_distribution_major_version == "8"
+
+- name: update limits.conf
+  tags: limits
+  blockinfile:
+    dest: /etc/security/limits.conf
+    marker: "### {mark} ansible managed"
+    backup: yes
+    content: |
+      *         hard    nofile      500000
+      *         soft    nofile      500000
+      root      hard    nofile      500000
+      root      soft    nofile      500000
+
+- name: upgrade all packages
+  tags: upgrade
+  yum: name=* state=latest
+

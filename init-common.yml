@@ -1,0 +1,9 @@
+---
+- hosts: all
+#  serial: 1
+  roles:
+    - common
+
+  vars:
+    timezone: Europe/Moscow
+    just_installed: true
